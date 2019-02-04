@@ -9,3 +9,5 @@ point represents a certain month and its color represents a cluster it belongs t
 
 As displayed in the plot, the clustering algorithm really nicely separated data into 3 distinct
 clusters. 
+
+In this repository, we have codes and data for getting the figure. 
