@@ -30,6 +30,7 @@ def getInputData(fileName):
 
 
 if __name__ == '__main__':
+    # getting data for each macroeconomic features into trainable format
     unemployment = []
     with open("data/unemployment", 'r') as f:
        for line in f:
@@ -57,15 +58,24 @@ if __name__ == '__main__':
     
     clusterData = np.array([unemployment, inflation, djia, sp]).T
     np.savetxt('data/clusterData.txt', clusterData)
+
+
+    # scale data before performing clustering algorithm to avoid one feature dominate others
+    scaler = StandardScaler() 
+    scaledData = scaler.fit_transform(clusterData)
    
     sampleSize = np.size(clusterData, axis=0)
     clusterNum = 3
-    kmeans = KMeans(n_clusters=clusterNum, random_state=41).fit(clusterData)
+    kmeans = KMeans(n_clusters=clusterNum, random_state=41).fit(scaledData)
     labels = kmeans.labels_
 
+
+    # create date index for plot
     dateIndex = pd.date_range('1/1/1990', '9/1/2018', freq='M')
     index = np.array([str(i) + '/' + str(j) for i,j in zip(dateIndex.year, dateIndex.month)])
+
     featureNames = ['unemployment', 'inflation', 'Dow Jones', 'S & P']
+
     fig, axes = plt.subplots(4, 1, sharex=True)
     xticks = np.linspace(0, sampleSize - 1, 4, dtype=np.int32)
     colors = ['r', 'g', 'k']
